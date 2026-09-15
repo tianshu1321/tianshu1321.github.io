@@ -75,18 +75,5 @@ a:hover{text-decoration:underline}
 }
 
 
-/* ===== 主题样式: dark ===== */
-/* 暗夜黑：深色背景 + 柔和对比 */
-.tag{background:#1c2128;color:#a9b4c0}
-.tag-link:hover{background:#242b34}
-.post-summary{color:#b9c0ca}
-.post-content blockquote{background:#151a20;color:#9aa4b2}
-.post-content pre{border-color:#232830}
-.post-content code{color:#f0b7c0}
-.post-content img{box-shadow:0 4px 20px rgba(0,0,0,.4)}
-.site-logo:hover{color:var(--accent)}
-::selection{background:#2b5d8a;color:#fff}
-::-webkit-scrollbar{width:11px;height:11px}
-::-webkit-scrollbar-track{background:#0f1115}
-::-webkit-scrollbar-thumb{background:#2a313b;border-radius:6px}
-::-webkit-scrollbar-thumb:hover{background:#39424f}
+/* ===== 主题样式: default ===== */
+/* 简约白：使用 theme.json 中的配色变量，无需额外覆盖 */
