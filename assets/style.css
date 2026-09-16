@@ -52,15 +52,20 @@ a:hover{text-decoration:underline}
 .back-link{display:inline-block;margin-top:36px;font-size:14px;color:var(--fg2)}
 .back-link:hover{color:var(--accent);text-decoration:none}
 
-/* 标签页 */
+/* 标签页 / 分类页 */
 .page-title{font-size:24px;font-weight:700;margin-bottom:22px}
+.page-desc{color:var(--fg2);font-size:14px;margin:-14px 0 24px;line-height:1.7}
 .tag-cloud{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:36px;padding-bottom:26px;border-bottom:1px solid var(--line)}
 .tag-cloud .tag{font-size:13.5px;padding:4px 12px}
 .tag-cloud .tag span{color:var(--fg2);font-size:11.5px;margin-left:3px}
 .tag-section{margin-bottom:30px}
 .tag-section h2{font-size:17px;margin-bottom:12px;font-weight:650}
+.tag-section h2 a{color:var(--fg);text-decoration:none}
+.tag-section h2 a:hover{color:var(--accent)}
+.count{color:var(--fg2);font-size:13px;font-weight:400;margin-left:4px}
 .tag-posts{list-style:none}
 .tag-posts li{padding:7px 0;border-bottom:1px dashed var(--line);font-size:14.5px;color:var(--fg2)}
+.cat{color:var(--accent)}
 
 .empty{color:var(--fg2);padding:60px 0;text-align:center}
 .site-footer{border-top:1px solid var(--line);padding:26px 0;font-size:13px;color:var(--fg2);text-align:center;line-height:2}
