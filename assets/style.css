@@ -10,10 +10,14 @@ a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
 
 .site-header{border-bottom:1px solid var(--line);padding:30px 0;margin-bottom:44px}
-.site-header .wrap{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.site-header .wrap{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.site-brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-width:0}
 .site-logo{font-size:21px;font-weight:700;color:var(--fg);letter-spacing:.3px}
 .site-logo:hover{text-decoration:none;color:var(--accent)}
 .site-desc{font-size:13.5px;color:var(--fg2)}
+.site-nav{display:flex;gap:18px;font-size:14px;flex-shrink:0}
+.site-nav a{color:var(--fg2);text-decoration:none;transition:color .15s}
+.site-nav a:hover{color:var(--accent)}
 
 .site-main{min-height:62vh;padding-bottom:70px}
 
@@ -95,3 +99,8 @@ a:hover{text-decoration:underline}
 ::-webkit-scrollbar-track{background:#0f1115}
 ::-webkit-scrollbar-thumb{background:#2a313b;border-radius:6px}
 ::-webkit-scrollbar-thumb:hover{background:#39424f}
+
+/* 导航适配（暗色） */
+.site-nav a{color:#8b94a3}
+.site-nav a:hover{color:var(--accent)}
+.site-header{border-bottom-color:var(--line)}
