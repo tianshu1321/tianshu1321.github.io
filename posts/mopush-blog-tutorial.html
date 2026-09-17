@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>利用 墨推 MoPush 发布自己的博客 · 鼠鼠的博客</title>
+<meta name="description" content="写博客这件事，卡住大多数人的从来不是「写」，而是「发布」：买服务器、装环境、配证书、折腾 CI，等这些都弄顺，当初想写的那点兴致也差不多没了。 墨推 MoPush 只为这一件事而做：你负责写，发布交给它。 写完点一次按钮，文章就会变成静态页面，推送到你自己的 GitHub 仓库，由 GitHub P">
+<link rel="canonical" href="https://blog.mopush.cn/posts/mopush-blog-tutorial.html"><meta name="keywords" content="静态博客,GitHub Pages,Markdown,教程,独立博客"><meta property="og:site_name" content="鼠鼠的博客"><meta property="og:title" content="利用 墨推 MoPush 发布自己的博客"><meta property="og:description" content="写博客这件事，卡住大多数人的从来不是「写」，而是「发布」：买服务器、装环境、配证书、折腾 CI，等这些都弄顺，当初想写的那点兴致也差不多没了。 墨推 MoPush 只为这一件事而做：你负责写，发布交给它。 写完点一次按钮，文章就会变成静态页面，推送到你自己的 GitHub 仓库，由 GitHub P"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.mopush.cn/posts/mopush-blog-tutorial.html"><meta name="twitter:card" content="summary"><meta name="theme-color" content="#ffffff"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"利用 墨推 MoPush 发布自己的博客","datePublished":"2026-09-17","description":"写博客这件事，卡住大多数人的从来不是「写」，而是「发布」：买服务器、装环境、配证书、折腾 CI，等这些都弄顺，当初想写的那点兴致也差不多没了。 墨推 MoPush 只为这一件事而做：你负责写，发布交给它。 写完点一次按钮，文章就会变成静态页面，推送到你自己的 GitHub 仓库，由 GitHub P","url":"https://blog.mopush.cn/posts/mopush-blog-tutorial.html","mainEntityOfPage":"https://blog.mopush.cn/posts/mopush-blog-tutorial.html"}</script>
+
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="alternate" type="application/rss+xml" title="鼠鼠的博客" href="/feed.xml">
+</head>
+<body class="theme-portal" style="--bg:#ffffff;--fg:#0f172a;--fg2:#64748b;--line:#e2e8f0;--accent:#4f46e5;--code-bg:#f8fafc;">
+<a class="skip-link" href="#main">跳到内容</a>
+<header class="site-header"><div class="wrap">
+<div class="site-brand">
+<a class="site-logo" href="/">鼠鼠的博客</a>
+<span class="site-desc">记录与分享</span>
+</div>
+<nav class="site-nav">
+<a href="/">首页</a>
+<a href="/archive.html">归档</a>
+<a href="/categories.html">分类</a>
+<a href="/tags.html">标签</a>
+<a href="/feed.xml">RSS</a>
+</nav>
+</div></header>
+<main class="site-main" id="main"><div class="wrap">
+<article class="post-full"><header class="post-header"><h1 class="post-title">利用 墨推 MoPush 发布自己的博客</h1><div class="post-meta"><time>2026-09-17</time><span class="dot">·</span><span>管理员</span><span class="dot">·</span><span>8 分钟阅读</span><span class="dot">·</span><span>2827 字</span></div><div class="post-tags"><a class="tag" href="/tags.html#github-pages"># GitHub Pages</a><a class="tag" href="/tags.html#markdown"># Markdown</a><a class="tag" href="/tags.html#教程"># 教程</a><a class="tag" href="/tags.html#独立博客"># 独立博客</a><a class="tag" href="/tags.html#静态博客"># 静态博客</a></div></header><div class="post-body with-toc"><aside class="post-toc"><div class="toc-title">目录</div><ul><li class="lvl2"><a href="#sec-1">它是怎么工作的</a></li><li class="lvl2"><a href="#sec-2">五分钟上手</a></li><li class="lvl3"><a href="#sec-3">第 1 步 · 注册账号</a></li><li class="lvl3"><a href="#sec-4">第 2 步 · 生成部署密钥，加到你的仓库</a></li><li class="lvl3"><a href="#sec-5">第 3 步 · 绑定仓库</a></li><li class="lvl3"><a href="#sec-6">第 4 步 · 打开 GitHub Pages</a></li><li class="lvl3"><a href="#sec-7">第 5 步 · 写第一篇，然后发布</a></li><li class="lvl2"><a href="#sec-8">除了发布，它还替你做了这些</a></li><li class="lvl2"><a href="#sec-9">关于审核，说清楚三件事</a></li><li class="lvl2"><a href="#sec-10">常见问题</a></li><li class="lvl2"><a href="#sec-11">最后</a></li></ul></aside><div class="post-content"><p>写博客这件事，卡住大多数人的从来不是「写」，而是「发布」：买服务器、装环境、配证书、折腾 CI，等这些都弄顺，当初想写的那点兴致也差不多没了。</p>
+<p>墨推 MoPush 只为这一件事而做：<strong>你负责写，发布交给它。</strong> 写完点一次按钮，文章就会变成静态页面，推送到你自己的 GitHub 仓库，由 GitHub Pages 免费托管。</p>
+<p>下面是我自己用它跑博客的完整过程，从注册到上线大概五分钟。</p>
+<h2 id="sec-1">它是怎么工作的</h2>
+<p>一句话：<strong>在网页后台写 Markdown，系统生成静态站，再 git push 到你自己的仓库。</strong></p>
+<ol>
+<li>你在后台写文章，内容存在平台的数据库里，随时可以继续改</li>
+<li>文章通过审核后，你点「生成并推送」</li>
+<li>平台在服务端生成静态 HTML：首页、文章页、分类页、标签页、归档页、404 页，以及 sitemap.xml、feed.xml</li>
+<li>用你账号专属的部署密钥，把生成结果推送到你绑定的仓库</li>
+<li>GitHub Pages 自动部署，大约一分钟后你的站点就更新了</li>
+</ol>
+<p>这里有两个我认为最关键的设计：</p>
+<ul>
+<li><strong>成品站完全属于你</strong>。仓库是你的，提交历史是你的，域名也是你的。哪天不想用这个平台了，把仓库拿走继续用就行——生成的是纯静态文件，不依赖任何后端。</li>
+<li><strong>平台只在两种情况下写你的仓库</strong>：你自己点「生成并推送」，或者文章通过自动审核后按平台设置替你推一次。管理员的人工复核<strong>不会</strong>碰你的仓库。</li>
+</ul>
+<h2 id="sec-2">五分钟上手</h2>
+<h3 id="sec-3">第 1 步 · 注册账号</h3>
+<p>打开 <a href="https://www.mopush.cn">www.mopush.cn</a> 注册，需要一个能收信的邮箱——注册要填邮箱验证码，这一步是为了挡住批量注册和垃圾内容。</p>
+<h3 id="sec-4">第 2 步 · 生成部署密钥，加到你的仓库</h3>
+<p>还没有仓库的话，先在 GitHub 建一个空仓库（可见性选 Public，仓库名随便取，<strong>不要</strong>勾选 Add a README file），下面都用这个仓库。</p>
+<p>然后回到墨推：平台会为你的账号生成一对专属 SSH 密钥，私钥留在服务端，公钥你复制走：</p>
+<ol>
+<li>到「设置」页，点「生成我的部署密钥」</li>
+<li>复制公钥内容</li>
+<li>打开你的 GitHub 仓库，进入 Settings → Deploy keys → Add deploy key</li>
+<li>把公钥粘进 Key 里，<strong>务必勾选 Allow write access</strong>（不勾，推送一定会失败）</li>
+<li>点 Add key 保存</li>
+</ol>
+<h3 id="sec-5">第 3 步 · 绑定仓库</h3>
+<p>在「设置 → 仓库地址」里填你的仓库，下面三种写法都认：</p>
+<pre><code>tianshu1321/my-blog
+https://github.com/tianshu1321/my-blog
+git@github.com:tianshu1321/my-blog.git</code></pre>
+<p>再填「站点访问地址」（你的 GitHub Pages 地址），点「保存并测试连接」——看到连接成功，就说明密钥配对了。</p>
+<h3 id="sec-6">第 4 步 · 打开 GitHub Pages</h3>
+<p>仓库 → Settings → Pages → Source 选 Deploy from a branch → 分支选 main、目录保持 <code>/(root)</code> → Save。</p>
+<blockquote>
+<p>想让博客用 <code>https://你的用户名.github.io/</code> 这样的根地址，把仓库名取成 <code>你的用户名.github.io</code> 即可；普通仓库名的访问地址是 <code>https://你的用户名.github.io/仓库名/</code>。如果打开页面样式全丢（白底无样式），基本都是路径问题，改成前者就好。</p>
+</blockquote>
+<h3 id="sec-7">第 5 步 · 写第一篇，然后发布</h3>
+<p>点左侧「写文章」：标题、分类、标签、封面、摘要、正文（支持 Markdown）。写完点「保存并提交审核」。</p>
+<p>接下来会发生什么：</p>
+<ul>
+<li>系统先做<strong>关键词 + AI 自动审核</strong>。内容正常就直接通过，并按平台设置<strong>立即自动推送上线</strong>，你一个按钮都不用点</li>
+<li>命中关键词或 AI 判定可疑，会转<strong>人工复审</strong>，结果用站内通知告诉你；人工通过后，你回后台点一次「生成并推送」</li>
+<li>还想再改改？先存成草稿，它不会出现在站点上，也不会占着审核队列</li>
+</ul>
+<p>我自己的博客就是这么发出来的：<a href="https://blog.mopush.cn">blog.mopush.cn</a>，仓库和托管都在我自己名下。后台左侧还有一页带完整步骤的「使用教程」，忘了哪一步随时可以翻。</p>
+<p>想先看看成品长什么样，直接点开 <a href="https://blog.mopush.cn">blog.mopush.cn</a> 就行 —— 那上面的每一篇文章，都是在这里写完点一下发出去的。</p>
+<h2 id="sec-8">除了发布，它还替你做了这些</h2>
+<ul>
+<li><strong>SEO</strong>：每篇文章可以单独设置标题、描述、关键词；站点级能配标题模板、默认描述、社交分享图、搜索引擎验证；sitemap.xml、feed.xml、robots.txt 和 canonical 都是自动生成的</li>
+<li><strong>主题</strong>：内置多套模板（default、dark、magazine、minimal、portal），整体风格和首页布局在「模板板块」里改</li>
+<li><strong>内容组织</strong>：分类、标签、置顶、封面、摘要、归档页都齐了</li>
+<li><strong>有反馈可追踪</strong>：审核结果、发布成功或失败都会用站内通知告诉你；推送失败时给的是能看懂的原因，而不是一屏 git 报错</li>
+</ul>
+<h2 id="sec-9">关于审核，说清楚三件事</h2>
+<p>静态博客平台最容易被问到的就是这一条，我直接摊开讲：</p>
+<ul>
+<li>审核<strong>只决定能不能在这个平台上发布</strong>，不改变「内容归你」这件事</li>
+<li>内容正常是<strong>自动放行</strong>的，绝大多数文章根本不会进人工队列</li>
+<li>真有问题时处置是分级的：轻的<strong>限制发布</strong>（你照常登录、编辑、删除、申诉，只是暂时不能推送到仓库），重的才停用账号</li>
+<li>已通过的文章被<strong>撤回</strong>后，不会卡在审核队列里等着，而是直接回到<strong>你的草稿箱</strong>，文章列表里能看到撤回说明，改完重新提交就行</li>
+<li>平台处理违规时，只动<strong>自己服务器上那份预览</strong>；你的 GitHub 仓库平台不去改，也不会强制推送、不会重写历史</li>
+</ul>
+<h2 id="sec-10">常见问题</h2>
+<p><strong>推送失败怎么办？</strong></p>
+<p>按提示排查，多数是三种情况：Deploy key 没勾 Allow write access；仓库地址填错；GitHub 那边有过改动导致本地和远端分叉（平台会自动合并后再推，真有冲突会明确提示）。完整的 git 输出可以在文章管理页展开查看。</p>
+<p><strong>可以用自己的域名吗？</strong></p>
+<p>可以。在仓库里加一条 CNAME 并把域名解析过去，在 GitHub Pages 里绑定该域名，然后把「设置 → 站点访问地址」改成你的域名，之后生成的 canonical 和 sitemap 都会用新域名。</p>
+<p><strong>文章数据存在哪？</strong></p>
+<p>标题、正文、标签这些存在平台数据库里，方便你在后台继续编辑；生成的静态成品在你的仓库里。</p>
+<p><strong>以后想搬走呢？</strong></p>
+<p>把仓库拿走，就是一份完整可用的静态博客，迁移成本基本为零。</p>
+<h2 id="sec-11">最后</h2>
+<p>如果你只是想找个地方安静写字，不想把时间花在服务器和部署上，这套流程应该合适：写完点一下，剩下的事交给它。</p>
+<p>博客地址：<a href="https://blog.mopush.cn">blog.mopush.cn</a></p>
+<p>注册地址：<a href="https://www.mopush.cn">www.mopush.cn</a></p></div></div><nav class="post-nav"><a class="pn prev" href="/posts/博客上线了.html"><span>上一篇</span><strong>博客上线了</strong></a><span class="pn empty"></span></nav><section class="related"><div class="sec-head">相关文章</div><div class="related-list"><a class="rel-item" href="/posts/博客上线了.html"><span class="rel-title">博客上线了</span><span class="rel-date">2026-09-16</span></a><a class="rel-item" href="/posts/我的工具箱清单.html"><span class="rel-title">我的工具箱清单</span><span class="rel-date">2026-09-16</span></a><a class="rel-item" href="/posts/如何搭建一个静态博客.html"><span class="rel-title">如何搭建一个静态博客</span><span class="rel-date">2026-09-16</span></a></div></section><a class="back-link" href="/">← 返回首页</a></article>
+</div></main>
+<footer class="site-footer"><div class="wrap">
+<div class="footer-inner">
+<span>© 2026 鼠鼠的博客</span>
+<span class="footer-links"><a href="/archive.html">归档</a><a href="/categories.html">分类</a><a href="/tags.html">标签</a><a href="/sitemap.xml">站点地图</a><a href="/feed.xml">RSS</a></span></div>
+</div></footer>
+<a class="to-top" href="#" aria-label="回到顶部">↑</a>
+</body>
+</html>

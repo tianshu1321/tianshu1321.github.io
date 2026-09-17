@@ -5,6 +5,13 @@
 <description>记录与分享</description>
 <language>zh-cn</language>
 <item>
+<title>利用 墨推 MoPush 发布自己的博客</title>
+<link>https://blog.mopush.cn/posts/mopush-blog-tutorial.html</link>
+<guid>https://blog.mopush.cn/posts/mopush-blog-tutorial.html</guid>
+<pubDate>Thu, 17 Sep 2026 00:00:00 +0800</pubDate>
+<description><![CDATA[写博客这件事，卡住大多数人的从来不是「写」，而是「发布」：买服务器、装环境、配证书、折腾 CI，等这些都弄顺，当初想写的那点兴致也差不多没了。 墨推 MoPush 只为这一件事而做：你负责写，发布交给它。 写完点一次按钮，文章就会变成静态页面，推送到你自己的 GitHub 仓库，由 GitHub Pages 免费托管。 下面是我自己用它跑博客的完整过程，从注册到上线大概五分钟。 它是怎么工作的 一句话：在网页后台写 Markdown，系统生成静态站，再 git push 到你自己的仓库。 1. 你在后台写文章，内容存在平台的数据库里，随时可以继续改 2. 文章通过审核后，你点「生成并推送」 3]]></description>
+</item>
+<item>
 <title>博客上线了</title>
 <link>https://blog.mopush.cn/posts/%E5%8D%9A%E5%AE%A2%E4%B8%8A%E7%BA%BF%E4%BA%86.html</link>
 <guid>https://blog.mopush.cn/posts/%E5%8D%9A%E5%AE%A2%E4%B8%8A%E7%BA%BF%E4%BA%86.html</guid>
