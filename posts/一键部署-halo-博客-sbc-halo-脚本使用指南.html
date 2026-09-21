@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>一键部署 Halo 博客：sbc-halo 脚本使用指南 · 鼠鼠的博客</title>
+<meta name="description" content="项目地址：&lt;https://github.com/shubaocai/sbchalo ｜ MIT License 一条命令，在一台干净的 Linux 服务器上把 Halo 博客跑起来。脚本会自动装 Docker、自动配好国内镜像加速、生成 Docker Compose 配置并拉起服务，装完直接进后台">
+<link rel="canonical" href="https://blog.mopush.cn/posts/%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2-halo-%E5%8D%9A%E5%AE%A2-sbc-halo-%E8%84%9A%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.html"><meta name="keywords" content="教程,技术"><meta property="og:site_name" content="鼠鼠的博客"><meta property="og:title" content="一键部署 Halo 博客：sbc-halo 脚本使用指南"><meta property="og:description" content="项目地址：&lt;https://github.com/shubaocai/sbchalo ｜ MIT License 一条命令，在一台干净的 Linux 服务器上把 Halo 博客跑起来。脚本会自动装 Docker、自动配好国内镜像加速、生成 Docker Compose 配置并拉起服务，装完直接进后台"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.mopush.cn/posts/%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2-halo-%E5%8D%9A%E5%AE%A2-sbc-halo-%E8%84%9A%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.html"><meta name="twitter:card" content="summary"><meta name="theme-color" content="#ffffff"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"一键部署 Halo 博客：sbc-halo 脚本使用指南","datePublished":"2026-09-21","description":"项目地址：<https://github.com/shubaocai/sbchalo ｜ MIT License 一条命令，在一台干净的 Linux 服务器上把 Halo 博客跑起来。脚本会自动装 Docker、自动配好国内镜像加速、生成 Docker Compose 配置并拉起服务，装完直接进后台","url":"https://blog.mopush.cn/posts/%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2-halo-%E5%8D%9A%E5%AE%A2-sbc-halo-%E8%84%9A%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.html","mainEntityOfPage":"https://blog.mopush.cn/posts/%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2-halo-%E5%8D%9A%E5%AE%A2-sbc-halo-%E8%84%9A%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.html"}</script>
+
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="alternate" type="application/rss+xml" title="鼠鼠的博客" href="/feed.xml">
+</head>
+<body class="theme-portal" style="--bg:#ffffff;--fg:#0f172a;--fg2:#64748b;--line:#e2e8f0;--accent:#4f46e5;--code-bg:#f8fafc;">
+<a class="skip-link" href="#main">跳到内容</a>
+<header class="site-header"><div class="wrap">
+<div class="site-brand">
+<a class="site-logo" href="/">鼠鼠的博客</a>
+<span class="site-desc">记录与分享</span>
+</div>
+<nav class="site-nav">
+<a href="/">首页</a>
+<a href="/archive.html">归档</a>
+<a href="/categories.html">分类</a>
+<a href="/tags.html">标签</a>
+<a href="/feed.xml">RSS</a>
+</nav>
+</div></header>
+<main class="site-main" id="main"><div class="wrap">
+<article class="post-full"><header class="post-header"><a class="post-cat" href="/category/sh.html">sh脚本</a><h1 class="post-title">一键部署 Halo 博客：sbc-halo 脚本使用指南</h1><div class="post-meta"><time>2026-09-21</time><span class="dot">·</span><span>管理员</span><span class="dot">·</span><span>12 分钟阅读</span><span class="dot">·</span><span>4796 字</span></div><div class="post-tags"><a class="tag" href="/tags.html#技术"># 技术</a><a class="tag" href="/tags.html#教程"># 教程</a></div></header><div class="post-body with-toc"><aside class="post-toc"><div class="toc-title">目录</div><ul><li class="lvl2"><a href="#sec-1">脚本帮你做了什么</a></li><li class="lvl2"><a href="#sec-2">环境要求</a></li><li class="lvl2"><a href="#sec-3">快速开始</a></li><li class="lvl3"><a href="#sec-4">第一步：下载并执行</a></li><li class="lvl3"><a href="#sec-5">第二步：进后台初始化</a></li><li class="lvl2"><a href="#sec-6">参数说明</a></li><li class="lvl2"><a href="#sec-7">几个常见用法</a></li><li class="lvl2"><a href="#sec-8">装完之后</a></li><li class="lvl3"><a href="#sec-9">目录结构</a></li><li class="lvl3"><a href="#sec-10">日常运维</a></li><li class="lvl3"><a href="#sec-11">升级 Halo</a></li><li class="lvl2"><a href="#sec-12">常见问题</a></li><li class="lvl2"><a href="#sec-13">卸载</a></li><li class="lvl2"><a href="#sec-14">参考文档</a></li></ul></aside><div class="post-content"><p>项目地址：&lt;https://github.com/shubaocai/sbc-halo&gt; ｜ MIT License</p>
+<p>一条命令，在一台干净的 Linux 服务器上把 Halo 博客跑起来。脚本会自动装 Docker、自动配好国内镜像加速、生成 Docker Compose 配置并拉起服务，装完直接进后台初始化。</p>
+<p>适合这样的场景：不想手写 <code>docker-compose.yaml</code>；服务器在国内，Docker Hub 直连不通；希望装完就能用。</p>
+<hr>
+<h2 id="sec-1">脚本帮你做了什么</h2>
+<ul>
+<li><strong>自动装 Docker</strong>：没有 Docker 就用官方脚本装，失败会自动回退到发行版仓库（国内的 <code>get.docker.com</code> 时通时不通，靠这一步兜底）</li>
+<li><strong>自动配镜像加速</strong>：探测可用的 Docker Hub 加速源写进 <code>daemon.json</code>，解决 <code>postgres</code> / <code>mysql</code> 这类基础镜像拉不动的问题</li>
+<li><strong>三种数据库</strong>：PostgreSQL（默认，Halo 官方推荐）/ MySQL / H2（单容器，仅测试用）</li>
+<li><strong>密码随机生成</strong>：数据库密码自动生成，只写在权限 <code>600</code> 的 <code>.env</code> 里</li>
+<li><strong>开箱可用</strong>：自动探测公网 IP 生成访问地址，部署后自动等健康检查通过再返回</li>
+<li><strong>幂等安全</strong>：已部署过不会覆盖你的配置，加 <code>--force</code> 才会重新生成，且旧文件先备份</li>
+</ul>
+<h2 id="sec-2">环境要求</h2>
+<p>| 项目 | 要求 |</p>
+<p>| --- | --- |</p>
+<p>| 系统 | Linux（需 systemd）：Ubuntu / Debian / CentOS / RHEL / Rocky / AlmaLinux / Fedora 等 |</p>
+<p>| 权限 | root（或 <code>sudo</code>） |</p>
+<p>| Shell | bash |</p>
+<p>| 内存 | 建议 ≥ 1GB |</p>
+<p>| 架构 | x86_64 / arm64 |</p>
+<p>已在 <strong>Ubuntu 22.04.5 LTS（腾讯云 CVM，2GB 内存）</strong> 实测：从零到服务可访问约 2 分钟，Halo 启动约 17 秒。</p>
+<h2 id="sec-3">快速开始</h2>
+<h3 id="sec-4">第一步：下载并执行</h3>
+<pre><code class="language-bash">curl -fsSL -o /tmp/halo.sh https://cdn.jsdelivr.net/gh/shubaocai/sbc-halo@main/install_halo.sh &amp;&amp; sudo bash /tmp/halo.sh</code></pre>
+<p>国内服务器建议用上面这条（jsDelivr）。<code>raw.githubusercontent.com</code> 在国内时通时不通，想用原生地址就加一层自动回退：</p>
+<pre><code class="language-bash">curl -fsSL -o /tmp/halo.sh https://raw.githubusercontent.com/shubaocai/sbc-halo/main/install_halo.sh \
+  || curl -fsSL -o /tmp/halo.sh https://cdn.jsdelivr.net/gh/shubaocai/sbc-halo@main/install_halo.sh
+[ -s /tmp/halo.sh ] &amp;&amp; sudo bash /tmp/halo.sh</code></pre>
+<p>也可以直接 clone 下来跑：</p>
+<pre><code class="language-bash">git clone https://github.com/shubaocai/sbc-halo.git
+cd sbc-halo
+sudo bash install_halo.sh</code></pre>
+<blockquote>
+<p><strong>提示</strong>：jsDelivr 会缓存 <code>@main</code> 分支，脚本更新后短时间内可能仍拉到旧版本。需要固定版本可以改用 tag 或 commit，例如 <code>https://cdn.jsdelivr.net/gh/shubaocai/sbc-halo@v1.0.0/install_halo.sh</code>。</p>
+</blockquote>
+<h3 id="sec-5">第二步：进后台初始化</h3>
+<p>部署完成后浏览器访问：</p>
+<pre><code>http://&lt;服务器IP&gt;:8090/console</code></pre>
+<p>首次访问会进入初始化页面，按提示创建管理员账号即可。</p>
+<blockquote>
+<p><strong>打不开怎么办</strong>：先查云厂商<strong>安全组</strong>有没有放行 <code>8090</code>（这是最常见的原因）。本机防火墙可以执行时加 <code>--open-firewall</code>，让脚本自动放行 ufw / firewalld 的端口。</p>
+</blockquote>
+<h2 id="sec-6">参数说明</h2>
+<p>| 参数 | 说明 | 默认 |</p>
+<p>| --- | --- | --- |</p>
+<p>| <code>--postgres</code> / <code>--pg</code> | 使用 PostgreSQL | ✅ 默认 |</p>
+<p>| <code>--mysql</code> | 使用 MySQL 8.0 | |</p>
+<p>| <code>--h2</code> | 使用内置 H2 单容器（仅测试，不建议生产） | |</p>
+<p>| <code>--port &lt;端口&gt;</code> | Halo 对外端口 | <code>8090</code> |</p>
+<p>| <code>--dir &lt;目录&gt;</code> | 安装目录（配置与数据都在这里） | <code>/opt/halo</code> |</p>
+<p>| <code>--version &lt;版本号&gt;</code> | Halo 社区版版本号 | <code>2.26.1</code> |</p>
+<p>| <code>--image &lt;镜像仓库&gt;</code> | Halo 镜像仓库 | <code>registry.fit2cloud.com/halo/halo</code> |</p>
+<p>| <code>--url &lt;外部地址&gt;</code> | 外部访问地址，不填自动探测公网 IP | 自动探测 |</p>
+<p>| <code>--db-password &lt;密码&gt;</code> | 数据库密码（仅限字母数字和 <code>. _ @ % + = -</code>） | 随机生成 |</p>
+<p>| <code>--jvm-opts &lt;参数&gt;</code> | JVM 参数 | <code>-Xmx512m -Xms256m</code> |</p>
+<p>| <code>--mirror &lt;地址\|none&gt;</code> | 指定 Docker Hub 加速地址；<code>none</code> 表示不配置 | 自动探测 |</p>
+<p>| <code>--open-firewall</code> | 自动放行本机 ufw / firewalld 端口 | 关闭 |</p>
+<p>| <code>--force</code> | 配置已存在时覆盖（旧文件自动备份） | 关闭 |</p>
+<p>| <code>-h</code>, <code>--help</code> | 显示帮助 | |</p>
+<p>所有参数都支持用环境变量代替（参数优先），例如：</p>
+<pre><code class="language-bash">HALO_PORT=9000 sudo -E bash install_halo.sh --h2</code></pre>
+<blockquote>
+<p>用 <code>sudo</code> 传环境变量记得加 <code>-E</code>，否则变量会被 sudo 丢掉。</p>
+</blockquote>
+<p>常用环境变量：<code>HALO_VERSION</code>、<code>HALO_IMAGE_REPO</code>、<code>DB_TYPE</code>、<code>HALO_PORT</code>、<code>HALO_DIR</code>、<code>HALO_EXTERNAL_URL</code>、<code>DB_PASSWORD</code>、<code>JVM_OPTS</code>、<code>DOCKER_MIRROR</code>。</p>
+<h2 id="sec-7">几个常见用法</h2>
+<pre><code class="language-bash"># 默认安装：PostgreSQL + Halo 2.26.1，端口 8090
+sudo bash install_halo.sh
+
+# 换 MySQL，换 8080 端口
+sudo bash install_halo.sh --mysql --port 8080
+
+# 指定域名，并自动放行本机防火墙
+sudo bash install_halo.sh --url https://blog.example.com --open-firewall
+
+# 单容器 + 内置 H2（仅体验）
+sudo bash install_halo.sh --h2
+
+# 装指定版本到自定义目录
+sudo bash install_halo.sh --version 2.26.0 --dir /data/halo
+
+# 重新生成配置（旧文件自动备份为 .bak.时间戳）
+sudo bash install_halo.sh --force</code></pre>
+<h2 id="sec-8">装完之后</h2>
+<h3 id="sec-9">目录结构</h3>
+<pre><code>/opt/halo
+├── docker-compose.yaml     # 容器编排
+├── .env                    # 端口、镜像、数据库密码（权限 600）
+├── halo2/                  # Halo 数据：文章、附件、主题、插件、密钥（务必备份）
+└── db/                     # PostgreSQL 数据（MySQL 模式为 mysql/）</code></pre>
+<p>容器与网络：</p>
+<p>| 名称 | 说明 |</p>
+<p>| --- | --- |</p>
+<p>| <code>halo</code> | Halo 应用容器，映射 <code>主机端口:8090</code> |</p>
+<p>| <code>halo-db</code> | 数据库容器（<code>--h2</code> 模式没有） |</p>
+<p>| <code>halo_halo_network</code> | 应用与数据库之间的内部网络 |</p>
+<h3 id="sec-10">日常运维</h3>
+<p>在安装目录下执行：</p>
+<pre><code class="language-bash">cd /opt/halo
+
+docker compose ps                  # 查看状态
+docker compose logs -f halo        # 实时日志
+docker compose restart halo        # 重启
+docker compose down                # 停止（数据保留）
+docker compose up -d               # 启动
+
+# 备份（数据都在这个目录，整目录打包，存到 /root 下）
+tar czf /root/halo-backup-$(date +%F).tar.gz -C /opt/halo .</code></pre>
+<h3 id="sec-11">升级 Halo</h3>
+<p>把 <code>.env</code> 里的镜像版本号改成目标版本，再重新拉起：</p>
+<pre><code class="language-bash">sed -i &#039;s|^HALO_IMAGE=.*|HALO_IMAGE=registry.fit2cloud.com/halo/halo:新版本号|&#039; /opt/halo/.env
+cd /opt/halo &amp;&amp; docker compose pull &amp;&amp; docker compose up -d</code></pre>
+<h2 id="sec-12">常见问题</h2>
+<p><strong>1. 拉取镜像超时：<code>dial tcp ...: i/o timeout</code></strong></p>
+<p>国内直连 Docker Hub 基本不通，<code>postgres</code> / <code>mysql</code> 这类镜像只存在于 Docker Hub。脚本会自动探测并配置加速源，通常无需干预。如果自动探测没找到可用源，手动指定一个：</p>
+<pre><code class="language-bash">sudo bash install_halo.sh --mirror https://docker.m.daocloud.io</code></pre>
+<p><strong>2. 容器退出了 / Halo 突然打不开（<code>Exited</code>）</strong></p>
+<pre><code class="language-bash">cd /opt/halo
+docker compose ps                    # STATUS 显示 Exited 就是退出了
+docker compose up -d                 # 原地拉起，数据不会丢
+docker compose logs --tail=50 halo   # 反复退出时看具体报错</code></pre>
+<p>比较典型的一种：数据库容器被停掉（手动 <code>docker stop</code>，或 Docker 守护进程重启过）后，Halo 会因为解析不到 <code>halodb</code> 这个服务名而崩溃，报 <code>Cannot connect to halodb/&lt;unresolved&gt;:5432</code>。compose 里配的是 <code>restart: on-failure:3</code>（沿用 Halo 官方示例的写法），<strong>只重试 3 次</strong>，耗尽之后容器就永久退出、不会自己再起来，需要手动 <code>docker compose up -d</code>。数据都在 <code>/opt/halo</code> 下，不会丢。</p>
+<blockquote>
+<p>想让数据库恢复后 Halo 自动接上，可以把两个服务的 <code>restart: on-failure:3</code> 改成 <code>unless-stopped</code>。</p>
+</blockquote>
+<p><strong>3. 提示&quot;配置文件已存在，未做任何修改&quot;</strong></p>
+<p>脚本默认幂等，不覆盖已有配置。要重新生成就加 <code>--force</code>。</p>
+<p><strong>4. 数据库密码在哪看</strong></p>
+<pre><code class="language-bash">grep DB_PASSWORD /opt/halo/.env</code></pre>
+<p><strong>5. H2 能用吗</strong></p>
+<p>不要用于生产。H2 是内嵌文件数据库，操作不当可能损坏数据文件，只适合内存很小的机器或纯体验。</p>
+<h2 id="sec-13">卸载</h2>
+<pre><code class="language-bash"># 删除 Halo（数据一起删掉，先备份）
+cd /opt/halo &amp;&amp; docker compose down --remove-orphans
+rm -rf /opt/halo
+
+# 卸载 Docker 软件包（自动识别装的是 docker.io 还是 docker-ce）
+sudo systemctl disable --now docker.socket docker.service containerd.service
+sudo apt-get purge -y $(dpkg -l | awk &#039;/^ii/ &amp;&amp; $2 ~ /^(docker|containerd|runc)/ {print $2}&#039;)
+sudo apt-get autoremove --purge -y
+sudo rm -rf /var/lib/docker /var/lib/containerd /etc/docker /etc/containerd
+sudo groupdel docker 2&gt;/dev/null</code></pre>
+<p>CentOS / RHEL 系把 <code>apt-get</code> 换成 <code>dnf</code> 即可。</p>
+<h2 id="sec-14">参考文档</h2>
+<ul>
+<li>Halo 官方文档：&lt;https://docs.halo.run&gt;</li>
+<li>使用 Docker Compose 部署：&lt;https://docs.halo.run/guide/install/docker-compose&gt;</li>
+<li>使用 Docker 部署（单容器 H2）：&lt;https://docs.halo.run/guide/install/docker&gt;</li>
+</ul>
+<hr>
+<p><em>MIT License © 2026 鼠宝财 ｜ 项目地址：&lt;https://github.com/shubaocai/sbc-halo&gt;</em></p></div></div><nav class="post-nav"><a class="pn prev" href="/posts/一行命令装好docker.html"><span>上一篇</span><strong>一行命令装好Docker</strong></a><a class="pn next" href="/posts/mopush-blog-tutorial.html"><span>下一篇</span><strong>利用 墨推 MoPush 发布自己的博客</strong></a></nav><section class="related"><div class="sec-head">相关文章</div><div class="related-list"><a class="rel-item" href="/posts/一行命令装好docker.html"><span class="rel-title">一行命令装好Docker</span><span class="rel-date">2026-09-21</span></a><a class="rel-item" href="/posts/我的工具箱清单.html"><span class="rel-title">我的工具箱清单</span><span class="rel-date">2026-09-16</span></a><a class="rel-item" href="/posts/如何搭建一个静态博客.html"><span class="rel-title">如何搭建一个静态博客</span><span class="rel-date">2026-09-16</span></a><a class="rel-item" href="/posts/mopush-blog-tutorial.html"><span class="rel-title">利用 墨推 MoPush 发布自己的博客</span><span class="rel-date">2026-09-17</span></a></div></section><a class="back-link" href="/">← 返回首页</a></article>
+</div></main>
+<footer class="site-footer"><div class="wrap">
+<div class="footer-inner">
+<span>© 2026 鼠鼠的博客</span>
+<span class="footer-links"><a href="/archive.html">归档</a><a href="/categories.html">分类</a><a href="/tags.html">标签</a><a href="/sitemap.xml">站点地图</a><a href="/feed.xml">RSS</a></span></div>
+</div></footer>
+<a class="to-top" href="#" aria-label="回到顶部">↑</a>
+</body>
+</html>

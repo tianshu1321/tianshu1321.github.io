@@ -12,6 +12,13 @@
 <description><![CDATA[写博客这件事，卡住大多数人的从来不是「写」，而是「发布」：买服务器、装环境、配证书、折腾 CI，等这些都弄顺，当初想写的那点兴致也差不多没了。 墨推 MoPush 只为这一件事而做：你负责写，发布交给它。 写完点一次按钮，文章就会变成静态页面，推送到你自己的 GitHub 仓库，由 GitHub Pages 免费托管。 下面是我自己用它跑博客的完整过程，从注册到上线大概五分钟。 它是怎么工作的 一句话：在网页后台写 Markdown，系统生成静态站，再 git push 到你自己的仓库。 1. 你在后台写文章，内容存在平台的数据库里，随时可以继续改 2. 文章通过审核后，你点「生成并推送」 3]]></description>
 </item>
 <item>
+<title>一键部署 Halo 博客：sbc-halo 脚本使用指南</title>
+<link>https://blog.mopush.cn/posts/%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2-halo-%E5%8D%9A%E5%AE%A2-sbc-halo-%E8%84%9A%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.html</link>
+<guid>https://blog.mopush.cn/posts/%E4%B8%80%E9%94%AE%E9%83%A8%E7%BD%B2-halo-%E5%8D%9A%E5%AE%A2-sbc-halo-%E8%84%9A%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97.html</guid>
+<pubDate>Mon, 21 Sep 2026 00:00:00 +0800</pubDate>
+<description><![CDATA[项目地址：<https://github.com/shubaocai/sbchalo ｜ MIT License 一条命令，在一台干净的 Linux 服务器上把 Halo 博客跑起来。脚本会自动装 Docker、自动配好国内镜像加速、生成 Docker Compose 配置并拉起服务，装完直接进后台初始化。 适合这样的场景：不想手写 dockercompose.yaml；服务器在国内，Docker Hub 直连不通；希望装完就能用。 脚本帮你做了什么 自动装 Docker：没有 Docker 就用官方脚本装，失败会自动回退到发行版仓库（国内的 get.docker.com 时通时不通，靠这一步]]></description>
+</item>
+<item>
 <title>一行命令装好Docker</title>
 <link>https://blog.mopush.cn/posts/%E4%B8%80%E8%A1%8C%E5%91%BD%E4%BB%A4%E8%A3%85%E5%A5%BDdocker.html</link>
 <guid>https://blog.mopush.cn/posts/%E4%B8%80%E8%A1%8C%E5%91%BD%E4%BB%A4%E8%A3%85%E5%A5%BDdocker.html</guid>
