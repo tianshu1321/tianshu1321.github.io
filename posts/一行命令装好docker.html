@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>一行命令装好Docker · 鼠鼠的博客</title>
+<meta name="description" content="每次拿到一台新服务器,装 Docker 都是一套固定流程:更新索引、装 cacertificates curl gnupg、导入 GPG 公钥、写 apt 源、再 update、装一堆包、配镜像加速、启动服务、设开机自启。官方文档十来步,照着敲五分钟,敲错一个字符就得从头排查。 这套流程我写成了脚本">
+<link rel="canonical" href="https://blog.mopush.cn/posts/%E4%B8%80%E8%A1%8C%E5%91%BD%E4%BB%A4%E8%A3%85%E5%A5%BDdocker.html"><meta name="keywords" content="教程,技术"><meta property="og:site_name" content="鼠鼠的博客"><meta property="og:title" content="一行命令装好Docker"><meta property="og:description" content="每次拿到一台新服务器,装 Docker 都是一套固定流程:更新索引、装 cacertificates curl gnupg、导入 GPG 公钥、写 apt 源、再 update、装一堆包、配镜像加速、启动服务、设开机自启。官方文档十来步,照着敲五分钟,敲错一个字符就得从头排查。 这套流程我写成了脚本"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.mopush.cn/posts/%E4%B8%80%E8%A1%8C%E5%91%BD%E4%BB%A4%E8%A3%85%E5%A5%BDdocker.html"><meta name="twitter:card" content="summary"><meta name="theme-color" content="#ffffff"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"一行命令装好Docker","datePublished":"2026-09-21","description":"每次拿到一台新服务器,装 Docker 都是一套固定流程:更新索引、装 cacertificates curl gnupg、导入 GPG 公钥、写 apt 源、再 update、装一堆包、配镜像加速、启动服务、设开机自启。官方文档十来步,照着敲五分钟,敲错一个字符就得从头排查。 这套流程我写成了脚本","url":"https://blog.mopush.cn/posts/%E4%B8%80%E8%A1%8C%E5%91%BD%E4%BB%A4%E8%A3%85%E5%A5%BDdocker.html","mainEntityOfPage":"https://blog.mopush.cn/posts/%E4%B8%80%E8%A1%8C%E5%91%BD%E4%BB%A4%E8%A3%85%E5%A5%BDdocker.html"}</script>
+
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="alternate" type="application/rss+xml" title="鼠鼠的博客" href="/feed.xml">
+</head>
+<body class="theme-portal" style="--bg:#ffffff;--fg:#0f172a;--fg2:#64748b;--line:#e2e8f0;--accent:#4f46e5;--code-bg:#f8fafc;">
+<a class="skip-link" href="#main">跳到内容</a>
+<header class="site-header"><div class="wrap">
+<div class="site-brand">
+<a class="site-logo" href="/">鼠鼠的博客</a>
+<span class="site-desc">记录与分享</span>
+</div>
+<nav class="site-nav">
+<a href="/">首页</a>
+<a href="/archive.html">归档</a>
+<a href="/categories.html">分类</a>
+<a href="/tags.html">标签</a>
+<a href="/feed.xml">RSS</a>
+</nav>
+</div></header>
+<main class="site-main" id="main"><div class="wrap">
+<article class="post-full"><header class="post-header"><a class="post-cat" href="/category/sh.html">sh脚本</a><h1 class="post-title">一行命令装好Docker</h1><div class="post-meta"><time>2026-09-21</time><span class="dot">·</span><span>管理员</span><span class="dot">·</span><span>7 分钟阅读</span><span class="dot">·</span><span>2673 字</span></div><div class="post-tags"><a class="tag" href="/tags.html#技术"># 技术</a><a class="tag" href="/tags.html#教程"># 教程</a></div></header><div class="post-body with-toc"><aside class="post-toc"><div class="toc-title">目录</div><ul><li class="lvl2"><a href="#sec-1">这行命令拆开看</a></li><li class="lvl2"><a href="#sec-2">四个参数分别管什么</a></li><li class="lvl2"><a href="#sec-3">为什么不用 curl | sudo bash</a></li><li class="lvl2"><a href="#sec-4">脚本做了什么</a></li><li class="lvl2"><a href="#sec-5">两个默认值,可能需要改</a></li><li class="lvl2"><a href="#sec-6">如果 raw 域名连不上</a></li><li class="lvl2"><a href="#sec-7">一个容易踩的坑</a></li><li class="lvl2"><a href="#sec-8">最后</a></li></ul></aside><div class="post-content"><p>每次拿到一台新服务器,装 Docker 都是一套固定流程:更新索引、装 <code>ca-certificates curl gnupg</code>、导入 GPG 公钥、写 apt 源、再 update、装一堆包、配镜像加速、启动服务、设开机自启。官方文档十来步,照着敲五分钟,敲错一个字符就得从头排查。</p>
+<p>这套流程我写成了脚本放在 GitHub 上,现在只需要一行:</p>
+<pre><code class="language-bash">curl -fsSL -o /tmp/docker.sh https://raw.githubusercontent.com/shubaocai/sbc-docker/main/install_docker.sh &amp;&amp; sudo bash /tmp/docker.sh</code></pre>
+<p>仓库地址:github.com/shubaocai/sbc-docker</p>
+<h2 id="sec-1">这行命令拆开看</h2>
+<p>两个动作,用 <code>&amp;&amp;</code> 串起来。</p>
+<p><strong>第一步,下载</strong></p>
+<pre><code class="language-bash">curl -fsSL -o /tmp/docker.sh &lt;url&gt;</code></pre>
+<p>把远端文件存成本地的 <code>/tmp/docker.sh</code>。注意 <code>-o</code> 后面跟的是<strong>完整文件路径</strong>,不是目录——它由&quot;目录 + 文件名&quot;拼成,curl 不会替你补文件名。</p>
+<p><strong>第二步,执行</strong></p>
+<pre><code class="language-bash">sudo bash /tmp/docker.sh</code></pre>
+<p><code>&amp;&amp;</code> 表示前一条成功了才执行后一条。curl 没拿到文件,后面的 bash 就不会跑——这正是&quot;两步走&quot;比管道安全的地方。</p>
+<h2 id="sec-2">四个参数分别管什么</h2>
+<p>| 参数 | 作用 | 少了会怎样 |</p>
+<p>|---|---|---|</p>
+<p>| <code>-f</code> | HTTP 4xx/5xx 时返回非零退出码 | 404 的 HTML 会被当脚本执行 |</p>
+<p>| <code>-s</code> | 不显示进度条 | 只影响观感 |</p>
+<p>| <code>-S</code> | 出错时仍然打印错误 | 搭配 <code>-s</code> 用,否则失败时静默 |</p>
+<p>| <code>-L</code> | 跟随重定向 | CDN 跳转时可能拿到空文件 |</p>
+<p><strong><code>-f</code> 是最关键的那个。</strong> 没有它,curl 遇到 404 也返回 0,<code>&amp;&amp;</code> 会放行,然后 bash 拿着一个 HTML 页面去执行,报一屏语法错误。</p>
+<h2 id="sec-3">为什么不用 <code>curl | sudo bash</code></h2>
+<p>一键脚本里这个写法太常见了:</p>
+<pre><code class="language-bash">curl -fsSL https://... | sudo bash</code></pre>
+<p>它有两个问题。</p>
+<p><strong>一是失败拦不住。</strong> 管道里 <code>$?</code> 取的是最后一个命令的退出码,bash 的退出码盖住了 curl 的。curl 断在下载途中,bash 照样执行已经收到的半截脚本——而这是个要用 root 权限改系统配置的脚本。</p>
+<p><strong>二是你没看过它。</strong> 无论哪种写法,直接执行远端脚本都是在信任作者。差别在于:管道写法连&quot;看一眼&quot;的机会都不给你。</p>
+<p>分两步至少留了个文件,可以先 <code>less /tmp/docker.sh</code> 翻一遍,再决定跑不跑。</p>
+<h2 id="sec-4">脚本做了什么</h2>
+<ol>
+<li><strong>先判断再动手</strong>。检测到 <code>docker</code> 命令已存在,就只做健康检查(服务在不在跑、有没有开机自启),然后退出。反复执行不会出问题。</li>
+<li><strong>环境校验</strong>。非 root、没有 systemd、不是 Ubuntu/Debian,一律报错退出,不硬来。</li>
+<li><strong>自动识别系统</strong>。从 <code>/etc/os-release</code> 读发行版和代号(jammy 等),用 <code>dpkg --print-architecture</code> 取架构,拼出对应的 apt 源地址。</li>
+<li><strong>安装</strong>。依赖 → GPG 公钥 → apt 源 → <code>docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</code>。</li>
+<li><strong>配置镜像加速</strong>。写入 <code>/etc/docker/daemon.json</code>,已有文件会先备份、不覆盖。</li>
+<li><strong>启动并验证</strong>。<code>systemctl enable --now docker</code>,再确认服务真的起来了,最后打印版本汇总。</li>
+</ol>
+<h2 id="sec-5">两个默认值,可能需要改</h2>
+<p>脚本顶部有两个变量:</p>
+<pre><code class="language-bash">DOCKER_APT_MIRROR=&quot;https://mirrors.aliyun.com/docker-ce&quot;
+REGISTRY_MIRROR=&quot;https://mirror.ccs.tencentyun.com&quot;</code></pre>
+<ul>
+<li><code>DOCKER_APT_MIRROR</code> 是<strong>装 Docker 软件包</strong>的源,默认走阿里云。想用官方源加 <code>--official</code>。</li>
+<li><code>REGISTRY_MIRROR</code> 是<strong>拉取镜像</strong>的加速器,默认填的是腾讯云内网地址,<strong>只在腾讯云的机器上有效</strong>。如果服务器不在腾讯云,加 <code>--no-mirror</code> 跳过,或者自己换一个可用地址。</li>
+</ul>
+<p>配错了不会导致安装失败,但 <code>docker pull</code> 会很慢甚至超时,这点容易被忽略。</p>
+<h2 id="sec-6">如果 raw 域名连不上</h2>
+<p><code>raw.githubusercontent.com</code> 在国内经常不通。换 jsDelivr CDN:</p>
+<pre><code class="language-bash">curl -fsSL -o /tmp/docker.sh https://cdn.jsdelivr.net/gh/shubaocai/sbc-docker@main/install_docker.sh &amp;&amp; sudo bash /tmp/docker.sh</code></pre>
+<p>jsDelivr 是正规 CDN,比各种免费代理稳定。缺点是有缓存,push 之后可能得等几分钟才生效。</p>
+<p>或者干脆把仓库 clone 下来,以后 <code>git pull</code> 增量更新:</p>
+<pre><code class="language-bash">git clone https://github.com/shubaocai/sbc-docker.git
+cd sbc-docker &amp;&amp; sudo bash install_docker.sh</code></pre>
+<h2 id="sec-7">一个容易踩的坑</h2>
+<p><strong>别把 <code>blob</code> 链接当成 raw 链接用。</strong></p>
+<pre><code>❌ github.com/shubaocai/sbc-docker/blob/main/install_docker.sh   ← 这是网页,返回 HTML
+
+✅ raw.githubusercontent.com/shubaocai/sbc-docker/main/install_docker.sh</code></pre>
+<p><code>blob</code> 那个是浏览器里看到的文件页面,返回的是一整页 HTML。更要命的是它<strong>返回 200</strong>,所以 <code>-f</code> 拦不住,<code>&amp;&amp;</code> 照样放行,bash 拿着 HTML 就去执行了。</p>
+<p>保险做法是在执行前确认下到的是不是脚本:</p>
+<pre><code class="language-bash">head -1 /tmp/docker.sh | grep -q &#039;^#!&#039; &amp;&amp; sudo bash /tmp/docker.sh</code></pre>
+<p>网页第一行是 <code>&lt;!DOCTYPE html&gt;</code>,不以 <code>#!</code> 开头,这一步就能拦住。</p>
+<h2 id="sec-8">最后</h2>
+<p>脚本在 github.com/shubaocai/sbc-docker,MIT 协议,随便用。</p></div></div><nav class="post-nav"><a class="pn prev" href="/posts/我的工具箱清单.html"><span>上一篇</span><strong>我的工具箱清单</strong></a><a class="pn next" href="/posts/mopush-blog-tutorial.html"><span>下一篇</span><strong>利用 墨推 MoPush 发布自己的博客</strong></a></nav><section class="related"><div class="sec-head">相关文章</div><div class="related-list"><a class="rel-item" href="/posts/我的工具箱清单.html"><span class="rel-title">我的工具箱清单</span><span class="rel-date">2026-09-16</span></a><a class="rel-item" href="/posts/如何搭建一个静态博客.html"><span class="rel-title">如何搭建一个静态博客</span><span class="rel-date">2026-09-16</span></a><a class="rel-item" href="/posts/mopush-blog-tutorial.html"><span class="rel-title">利用 墨推 MoPush 发布自己的博客</span><span class="rel-date">2026-09-17</span></a></div></section><a class="back-link" href="/">← 返回首页</a></article>
+</div></main>
+<footer class="site-footer"><div class="wrap">
+<div class="footer-inner">
+<span>© 2026 鼠鼠的博客</span>
+<span class="footer-links"><a href="/archive.html">归档</a><a href="/categories.html">分类</a><a href="/tags.html">标签</a><a href="/sitemap.xml">站点地图</a><a href="/feed.xml">RSS</a></span></div>
+</div></footer>
+<a class="to-top" href="#" aria-label="回到顶部">↑</a>
+</body>
+</html>

@@ -12,11 +12,11 @@
 <description><![CDATA[写博客这件事，卡住大多数人的从来不是「写」，而是「发布」：买服务器、装环境、配证书、折腾 CI，等这些都弄顺，当初想写的那点兴致也差不多没了。 墨推 MoPush 只为这一件事而做：你负责写，发布交给它。 写完点一次按钮，文章就会变成静态页面，推送到你自己的 GitHub 仓库，由 GitHub Pages 免费托管。 下面是我自己用它跑博客的完整过程，从注册到上线大概五分钟。 它是怎么工作的 一句话：在网页后台写 Markdown，系统生成静态站，再 git push 到你自己的仓库。 1. 你在后台写文章，内容存在平台的数据库里，随时可以继续改 2. 文章通过审核后，你点「生成并推送」 3]]></description>
 </item>
 <item>
-<title>博客上线了</title>
-<link>https://blog.mopush.cn/posts/%E5%8D%9A%E5%AE%A2%E4%B8%8A%E7%BA%BF%E4%BA%86.html</link>
-<guid>https://blog.mopush.cn/posts/%E5%8D%9A%E5%AE%A2%E4%B8%8A%E7%BA%BF%E4%BA%86.html</guid>
-<pubDate>Wed, 16 Sep 2026 00:00:00 +0800</pubDate>
-<description><![CDATA[欢迎来到我的博客 这是第一篇文章，用来验证整套流程。 为什么写博客 记录学习过程，也方便以后回顾。主要有三个原因： 强迫自己把知识讲清楚 积累可检索的笔记 认识志同道合的人 技术栈 本站是一个自建系统： 后续计划 1. 每周至少一篇 2. 记录踩坑经验 3. 分享工具和脚本 写作是最好的思考方式。]]></description>
+<title>一行命令装好Docker</title>
+<link>https://blog.mopush.cn/posts/%E4%B8%80%E8%A1%8C%E5%91%BD%E4%BB%A4%E8%A3%85%E5%A5%BDdocker.html</link>
+<guid>https://blog.mopush.cn/posts/%E4%B8%80%E8%A1%8C%E5%91%BD%E4%BB%A4%E8%A3%85%E5%A5%BDdocker.html</guid>
+<pubDate>Mon, 21 Sep 2026 00:00:00 +0800</pubDate>
+<description><![CDATA[每次拿到一台新服务器,装 Docker 都是一套固定流程:更新索引、装 cacertificates curl gnupg、导入 GPG 公钥、写 apt 源、再 update、装一堆包、配镜像加速、启动服务、设开机自启。官方文档十来步,照着敲五分钟,敲错一个字符就得从头排查。 这套流程我写成了脚本放在 GitHub 上,现在只需要一行: 仓库地址:github.com/shubaocai/sbcdocker 这行命令拆开看 两个动作,用 && 串起来。 第一步,下载 把远端文件存成本地的 /tmp/docker.sh。注意 o 后面跟的是完整文件路径,不是目录——它由"目录 + 文件名"拼成]]></description>
 </item>
 <item>
 <title>我的工具箱清单</title>
